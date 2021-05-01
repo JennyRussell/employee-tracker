@@ -22,14 +22,16 @@ Role.init({
     department_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        autoIncrement: true,
+
         references: {
-            model: 'Department'
+            model: 'Department',
+            key: 'id'
         }
     },
 
 }, {
     sequelize,
+    timestamps: false,
     freezeTableName: true,
     underscored: true,
     modelName: 'Role',

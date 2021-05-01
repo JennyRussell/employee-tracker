@@ -10,7 +10,7 @@
         "first_name": "Toshinori",
         "last_name": "Yagi",
         "role_id": 2,
-        "manager_id": ""
+        "manager_id": null
     }
 
 ]

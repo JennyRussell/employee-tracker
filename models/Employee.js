@@ -23,22 +23,25 @@ Employee.init({
     role_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        autoIncrement: true,
+
         references: {
-            model: 'Role'
+            model: 'Role',
+            key: 'id',
         }
     },
     manager_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        autoIncrement: true,
+
         references: {
-            model: 'Role'
+            model: 'Employee',
+            key: 'id',
         }
     },
 
 }, {
     sequelize,
+    timestamps: false,
     freezeTableName: true,
     underscored: true,
     modelName: 'Employee',
