@@ -1,0 +1,16 @@
+[{
+        "id": 1,
+        "first_name": "Izuku",
+        "last_name": "Midoriya",
+        "role_id": 1,
+        "manager_id": 1
+    },
+    {
+        "id": 2,
+        "first_name": "Toshinori",
+        "last_name": "Yagi",
+        "role_id": 2,
+        "manager_id": ""
+    }
+
+]
