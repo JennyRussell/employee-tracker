@@ -20,6 +20,7 @@ node server.js
 * mysql2
 * path
 * sequelize
+* console.table 
 
 
 ### Installing

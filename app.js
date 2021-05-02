@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 const Employee = require('./models/Employee');
 const Role = require('./models/Role');
 const Department = require('./models/Department');
-// const cTable = require('console.table');
+const cTable = require('console.table');
 
 
 module.exports = {
@@ -210,6 +210,16 @@ module.exports = {
         }).then(async(data) => {
             switch (data.updateChoices) {
                 case 'Employee Role':
+
+                    inquirer.prompt({
+                        type: 'input',
+                        message: 'Please enter the id of the employee whose role you wish to update.',
+                        name: 'id'
+                    }).then(async(answer) => {
+
+                    })
+
+
                     console.log("works!");
                     break;
                 case 'Employee Manager':
