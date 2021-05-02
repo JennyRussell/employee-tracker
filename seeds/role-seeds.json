@@ -3,7 +3,15 @@
         "title": "Pro Hero",
         "salary": 1000000,
         "department_id": 1,
-        "manager_id": 1
+        "manager_id": 2
+    },
+    {
+        "id": 2,
+        "title": "Students",
+        "salary": 10000,
+        "department_id": 2,
+        "manager_id": 2
     }
+
 
 ]
