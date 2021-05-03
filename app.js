@@ -40,22 +40,22 @@ module.exports = {
             message: 'What would you like to view?',
             choices: ['Departments', 'Roles', 'Employees', 'Back'],
             name: 'viewChoices'
-        }).then(data => {
+        }).then(async data => {
             switch (data.viewChoices) {
                 case 'Departments':
-                    Department.findAll().then(data => {
-                        console.table(data, ['dataValues']);
-                    })
+                    let dpt = await Department.findAll()
+                    console.table(dpt.map(d => d.dataValues));
+                    this.mainMenu();
                     break;
                 case 'Roles':
-                    Role.findAll().then(data => {
-                        console.table(data, ['dataValues']);
-                    })
+                    let role = await Role.findAll()
+                    console.table(role.map(d => d.dataValues));
+                    this.mainMenu();
                     break;
                 case 'Employees':
-                    Employee.findAll().then(data => {
-                        console.table(data, ['dataValues']);
-                    })
+                    let emp = await Employee.findAll()
+                    console.table(emp.map(d => d.dataValues));
+                    this.mainMenu();
                     break;
 
                 case 'Back':
@@ -88,7 +88,7 @@ module.exports = {
                             console.log(`Successfully added a new department called ${answer.newDepartment}`);
                         })
                     })
-
+                    this.mainMenu();
                     break;
 
                 case 'Roles':
@@ -124,7 +124,7 @@ module.exports = {
                         ]).then(async(answer) => {
 
                             for (let i = 0; i < allDepartments.length; i++) {
-                                if (answer.department === allDepartments[i].name) {
+                                if (answer.roleDepartment === allDepartments[i].name) {
                                     userDepartment = allDepartments[i].id;
                                 }
                             }
@@ -135,11 +135,12 @@ module.exports = {
                                 department_id: userDepartment
                             });
                             console.log(`Successfully added a new role title: ${answer.roleTitle}`);
+
                         })
                     } catch (error) {
                         console.log(error)
                     };
-
+                    this.mainMenu();
                     break;
                 case 'Employees':
                     let roles = [];
@@ -150,7 +151,7 @@ module.exports = {
                         })
 
                         for (let i = 0; i < allRoles.length; i++) {
-                            roles.push(allRoles[i].name)
+                            roles.push(allRoles[i].title)
                         }
 
                         inquirer.prompt([{
@@ -174,7 +175,7 @@ module.exports = {
                         ]).then(async(answer) => {
 
                             for (let i = 0; i < allRoles.length; i++) {
-                                if (answer.role === allRoles[i].title) {
+                                if (answer.employeeRole === allRoles[i].title) {
                                     userRole = allRoles[i].id;
                                 }
                             }
@@ -189,6 +190,7 @@ module.exports = {
                     } catch (error) {
                         console.log(error)
                     };
+                    this.mainMenu();
                     break;
 
                 case 'Back':
@@ -210,20 +212,96 @@ module.exports = {
         }).then(async(data) => {
             switch (data.updateChoices) {
                 case 'Employee Role':
+                    let emp = [];
+                    let userEmp;
+                    try {
+                        const allEmp = await Employee.findAll({
+                            raw: true
+                        })
 
-                    inquirer.prompt({
-                        type: 'input',
-                        message: 'Please enter the id of the employee whose role you wish to update.',
-                        name: 'id'
-                    }).then(async(answer) => {
+                        for (let i = 0; i < allEmp.length; i++) {
+                            emp.push({
+                                name: `${allEmp[i].first_name} ${allEmp[i].last_name}`,
+                                value: allEmp[i].id
+                            })
+                        }
+                        inquirer.prompt({
+                            type: 'list',
+                            message: 'Please select the employee whose role you wish to update.',
+                            name: 'empList',
+                            choices: emp
+                        }).then(async(answer) => {
+                            userEmp = answer.empList
+                            let rol = [];
+                            const allRoles = await Role.findAll({
+                                raw: true
+                            })
 
-                    })
+                            for (let i = 0; i < allRoles.length; i++) {
+                                rol.push({
+                                    name: allRoles[i].title,
+                                    value: allRoles[i].id
+                                })
+                            }
+                            inquirer.prompt({
+                                type: 'list',
+                                message: 'Please select the role you want this employee to have.',
+                                name: 'roleList',
+                                choices: rol
+                            }).then(async(answer) => {
+                                Employee.update({ role_id: answer.roleList }, { where: { id: userEmp } }).then(resp => {
+                                    console.log("Role successfully updated.")
+                                }).catch(err => {
+                                    console.log(err);
+                                })
+                            })
+                        })
+                    } catch { console.log('error') }
 
-
-                    console.log("works!");
+                    this.mainMenu();
                     break;
                 case 'Employee Manager':
-                    console.log("works!");
+                    let empToManage = [];
+                    let userManager = null;
+                    try {
+                        const allEmp = await Employee.findAll({
+                            raw: true
+                        })
+
+                        for (let i = 0; i < allEmp.length; i++) {
+                            empToManage.push({
+                                name: `${allEmp[i].first_name} ${allEmp[i].last_name}`,
+                                value: allEmp[i].id
+                            })
+                        }
+                        inquirer.prompt({
+                            type: 'list',
+                            message: 'Please select the employee whose manager you wish to designate.',
+                            name: 'empList',
+                            choices: empToManage
+                        }).then(async(answer) => {
+                            userManager = answer.empList
+
+
+                            inquirer.prompt({
+                                type: 'list',
+                                message: 'Please select the manager for this employee',
+                                name: 'managerList',
+                                choices: empToManage
+                            }).then(async(answer) => {
+                                Employee.update({ manager_id: answer.managerList }, { where: { id: userManager } }).then(resp => {
+                                    console.log("Manager successfully updated.")
+                                    this.mainMenu();
+
+                                }).catch(err => {
+                                    console.log(err);
+                                })
+                            })
+                        })
+
+
+                    } catch { console.log('error') }
+
                     break;
                 case 'Back':
                     this.mainMenu();
