@@ -22,6 +22,10 @@ node server.js
 * sequelize
 * console.table 
 
+### Demo Video
+
+Please check out the employee-tracker-video.mp4 file to see the demo video.
+
 
 ### Installing
 

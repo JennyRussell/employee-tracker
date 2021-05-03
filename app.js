@@ -86,9 +86,10 @@ module.exports = {
                             name: answer.newDepartment
                         }).then(data => {
                             console.log(`Successfully added a new department called ${answer.newDepartment}`);
+                            this.mainMenu();
+
                         })
                     })
-                    this.mainMenu();
                     break;
 
                 case 'Roles':
@@ -135,12 +136,13 @@ module.exports = {
                                 department_id: userDepartment
                             });
                             console.log(`Successfully added a new role title: ${answer.roleTitle}`);
+                            this.mainMenu();
+
 
                         })
                     } catch (error) {
                         console.log(error)
                     };
-                    this.mainMenu();
                     break;
                 case 'Employees':
                     let roles = [];
@@ -186,11 +188,12 @@ module.exports = {
                                 role_id: userRole
                             });
                             console.log(`Successfully added a new employee named: ${answer.firstName} ${answer.lastName}`);
+                            this.mainMenu();
+
                         })
                     } catch (error) {
                         console.log(error)
                     };
-                    this.mainMenu();
                     break;
 
                 case 'Back':
@@ -251,6 +254,8 @@ module.exports = {
                             }).then(async(answer) => {
                                 Employee.update({ role_id: answer.roleList }, { where: { id: userEmp } }).then(resp => {
                                     console.log("Role successfully updated.")
+                                    this.mainMenu();
+
                                 }).catch(err => {
                                     console.log(err);
                                 })
@@ -258,7 +263,6 @@ module.exports = {
                         })
                     } catch { console.log('error') }
 
-                    this.mainMenu();
                     break;
                 case 'Employee Manager':
                     let empToManage = [];
